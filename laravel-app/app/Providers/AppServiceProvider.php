@@ -13,11 +13,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(OmikujiInterface::class, FortuneService::class);
-
-        $this->app->singleton('omikuji', function ($app) {
-            return $app->make(OmikujiInterface::class);
-        });
     }
 
     /**
