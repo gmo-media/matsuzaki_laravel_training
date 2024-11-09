@@ -30,6 +30,10 @@ class FortuneService implements OmikujiInterface
 
     public function draw(): string
     {
+        // 通常のおみくじ
+        if () {
+
+        }
         $result = $this->fortunes[array_rand($this->fortunes)];
         $this->logInfo("Fortune drawn: $result");
         $message = self::getMessages($result);
