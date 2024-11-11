@@ -28,17 +28,28 @@ class FortuneService implements OmikujiInterface
         return $this->messages[$name] ?? "メッセージが設定されていません。";
     }
 
-    public function draw(): string
+    public function draw($is_billing = false): string
     {
         // 通常のおみくじ
-        if () {
-
+        if (is_null($is_billing)) {
+            $result = $this->fortunes[array_rand($this->fortunes)];
+            $this->logInfo("Fortune drawn: $result");
         }
-        $result = $this->fortunes[array_rand($this->fortunes)];
-        $this->logInfo("Fortune drawn: $result");
+
+        if (is_billing) {
+            $isBillingFortunes = array_filter($this->fortunes, function ($fortune) {
+                // 課金なら大凶を排除
+                return $fortune !== '大凶';
+            });
+
+            // 課金なら大吉を2つ追加
+            $isBillingFortunes[] = '大吉';
+            $isBillingFortunes[] = '大吉';
+
+            $result = $isBillingFortunes[array_rand($isBillingFortunes)];
+        }
+
         $message = self::getMessages($result);
-
-
         return "$result - " . $message;
     }
 
