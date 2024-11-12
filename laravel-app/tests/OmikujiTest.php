@@ -37,4 +37,26 @@ class OmikujiTest extends TestCase
         $uniqueResults = array_unique($results);
         $this->assertGreaterThan(1, count($uniqueResults), "おみくじの結果が偏っています");
     }
+
+    /**
+     * @return void
+     * おみくじを100回引いて大凶が出ないかテスト
+     */
+    public function testBillingOmikujiDoesNotIncludeDaikyou()
+    {
+        $isBilling = true;
+        $trialsNum = 100;
+        $containsDaikyou = false;
+
+        for ($i = 0; $i < $trialsNum; $i++) {
+            $omikuji = new FortuneService();
+            $result = $omikuji->draw($isBilling);
+            if (strpos($result, '大凶') !== false) {
+                $containsDaikyou = true;
+                break;
+            }
+
+        }
+        $this->assertFalse($containsDaikyou, "大凶が含まれています");
+    }
 }

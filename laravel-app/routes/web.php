@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 Route::get('/omikuji-view', function () {return view('omikuji');});
 Route::get('/omikuji', [OmikujiController::class, 'draw']);
+Route::get('/omikuji/paid', [OmikujiController::class, 'drawPaid']);

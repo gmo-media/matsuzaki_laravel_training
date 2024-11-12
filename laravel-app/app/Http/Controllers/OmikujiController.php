@@ -19,6 +19,11 @@ class OmikujiController extends Controller
     {
         $result = Omikuji::draw();
         return response()->json(['result' => $result], 200, [], JSON_UNESCAPED_UNICODE);
+    }
 
+    public function drawPaid()
+    {
+        $result = $this->omikuji->draw('lucky');
+        return response()->json(['result' => $result], 200, [], JSON_UNESCAPED_UNICODE);
     }
 }
