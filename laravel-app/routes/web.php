@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Controllers\OmikujiController;
+use App\Http\Livewire\OmikujiComponent;
 use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\BaseballComponent;
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/omikuji-view', function () {return view('omikuji');});
-Route::get('/omikuji', [OmikujiController::class, 'draw']);
-Route::get('/omikuji/paid', [OmikujiController::class, 'drawPaid']);
+Route::get('/omikuji-view', OmikujiComponent::class);
+Route::get('/omikuji', [OmikujiComponent::class, 'draw']);
+Route::get('/omikuji/paid', [OmikujiComponent::class, 'drawPaid']);
+Route::get('/baseball', BaseballComponent::class);

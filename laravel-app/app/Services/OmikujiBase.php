@@ -3,10 +3,14 @@
 namespace App\Services;
 
 use App\Traits\Loggable;
+use App\Traits\HistoryTrait;
 
-abstract class OmikujiBase
+abstract class OmikujiBase implements OmikujiInterface
 {
     use Loggable;
+    use HistoryTrait;
+
+    public $result;
 
     // 確率の重みを持つ
     protected array $fortunes = [
@@ -24,21 +28,23 @@ abstract class OmikujiBase
      */
     public function draw(bool $isBilling = false): string
     {
-        $adjustedFortunes = $isBilling ? $this->adjustBillingOdds() : $this->fortunes;
+        $adjustedFortunes = $isBilling ? $this->isBilling() : $this->fortunes;
 
         $result = $this->weightRandom($adjustedFortunes);
-        return "$result - " .$this->getMessage($result);
+        $this->result =  "$result - " .$this->getMessage($result);
+        $this->addToHistory($this->result);
+        return $this->result;
     }
 
     /**
      * 課金時の確率調整
      */
-    public function adjustBillingOdds(): array
+    public function isBilling(): array
     {
         $fortunes = $this->fortunes;
 
         // 課金時は大吉の重みを増加する
-        $fortunes['大吉'] += 20;
+        $fortunes['大吉'] += 10;
 
         // 大凶の重みを減少させる
         $fortunes['大凶'] -= 2;
@@ -68,5 +74,5 @@ abstract class OmikujiBase
     /**
      * 結果のメッセージを返す
      */
-    abstract protected function getMessage(string $result): string;
+    abstract  function getMessage(string $result): string;
 }

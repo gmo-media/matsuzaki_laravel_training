@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\FortuneService;
 use App\Services\OmikujiInterface;
-use Omikuji;
 
 class OmikujiController extends Controller
 {
-    protected OmikujiInterface $omikuji;
+    protected FortuneService $omikuji;
 
     public function __construct(OmikujiInterface $omikuji)
     {
@@ -17,7 +16,8 @@ class OmikujiController extends Controller
 
     public function draw()
     {
-        $result = Omikuji::draw();
+        new FortuneService();
+        $result = $this->omikuji->draw();
         return response()->json(['result' => $result], 200, [], JSON_UNESCAPED_UNICODE);
     }
 

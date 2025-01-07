@@ -2,46 +2,24 @@
 
 namespace App\Services;
 
-use App\Services\OmikujiInterface;
 use App\Traits\Loggable;
 
-class FortuneService implements OmikujiInterface
+class FortuneService extends OmikujiBase
 {
     use Loggable;
     private $messages = [];
-    protected array $fortunes =
-        [
-            '大吉',
-            '中吉',
-            '小吉',
-            '凶',
-            '大凶'
-        ];
 
-    public function draw($isBilling = false): string
+    public function isBilling(): array
     {
-        if ($isBilling) {
-            $isBillingFortunes = array_filter($this->fortunes, function ($fortune) {
-                // 課金なら大凶を排除
-                return $fortune !== '大凶';
-            });
+        $fortunes = $this->fortunes;
 
-            // 課金なら大吉を2つ追加
-            $isBillingFortunes[] = '大吉';
-            $isBillingFortunes[] = '大吉';
+        $fortunes['大吉'] += 10;
+        $fortunes['大凶'] -= 2;
 
-            $result = $isBillingFortunes[array_rand($isBillingFortunes)];
-        } else {
-            $result = $this->fortunes[array_rand($this->fortunes)];
-        }
-
-        $message = self::getMessages($result);
-        $this->logInfo("Fortune drawn: $result");
-
-        return "$result - " . $message;
+        return $fortunes;
     }
 
-    public function getMessages($result): string
+    public function getMessage($result): string
     {
         $fortuneService = new FortuneService();
 

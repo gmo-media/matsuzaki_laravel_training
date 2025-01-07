@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Services\OmikujiInterface;
 use App\Services\FortuneService;
+use Livewire\Livewire;
+use App\Services\BaseballService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,8 +17,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(OmikujiInterface::class, FortuneService::class);
 
-        $this->app->singleton('omikuji', function ($app) {
-            return $app->make(OmikujiInterface::class);
+        $this->app->singleton(BaseballService::class, function ($app) {
+            return new BaseballService();
         });
     }
 
@@ -25,6 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Livewire::component('omikuji-component', \App\Http\Livewire\OmikujiComponent::class);
     }
 }
